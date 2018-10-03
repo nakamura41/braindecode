@@ -112,9 +112,12 @@ def run_exp(data_folder, subject_id, low_cut_hz, model, cuda):
 
     log.info("Model: \n{:s}".format(str(model)))
     dummy_input = np_to_var(train_set.X[:1, :, :, None])
+    print("dummy_input shape:", train_set.X[:1, :, :, None].shape)
     if cuda:
         dummy_input = dummy_input.cuda()
     out = model(dummy_input)
+
+    print("out shape:", out.cpu().data.numpy().shape)
 
     n_preds_per_input = out.cpu().data.numpy().shape[2]
 
@@ -150,7 +153,7 @@ if __name__ == '__main__':
     logging.basicConfig(format='%(asctime)s %(levelname)s : %(message)s',
                         level=logging.DEBUG, stream=sys.stdout)
     # Should contain both .gdf files and .mat-labelfiles from competition
-    data_folder = '/home/schirrmr/data/bci-competition-iv/2a-gdf/'
+    data_folder = '/home/david/data/BCICIV_2a_gdf/'
     subject_id = 1 # 1-9
     low_cut_hz = 4 # 0 or 4
     model = 'shallow' #'shallow' or 'deep'
